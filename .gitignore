@@ -1,5 +1,7 @@
 # Data
-data/
+!data/raw/spam.csv
+data/processed/
+data/models/
 
 # Python env and cache
 __pycache__/
