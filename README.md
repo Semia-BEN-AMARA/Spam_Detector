@@ -1,24 +1,30 @@
 # AT&T Spam Detector 🕵️‍♀️
 
 ## Project Overview
-This repository contains a Deep Learning solution developed for AT&T to automate the detection of spam SMS messages. The goal is to build an end-to-end text classification pipeline capable of accurately filtering out spam based solely on message content, protecting users from unwanted exposure.
+An end-to-end NLP solution developed for AT&T to detect and filter out spam SMS traffic. This repository demonstrates a clear engineering progression from a basic neural baseline up to modern Transformer Fine-Tuning (**DistilBERT**), optimized to handle severe class imbalance (~86.6% Ham / ~13.4% Spam).
 
-## Dataset
-The project utilizes an SMS Spam collection dataset consisting of text messages tagged as either `ham` (legitimate) or `spam`. 
+## 📊 Performance Benchmark
 
-## Project Structure
-* `data/`: Contains raw and processed datasets (excluded from version control).
-* `notebooks/`: Jupyter notebooks used for Exploratory Data Analysis (EDA), data preprocessing, and model training.
-* `src/`: Reusable production-ready Python modules for text processing and modeling.
+Our main priority was to minimize **False Positives** (blocking a legitimate user message by mistake). Therefore, **Spam Precision** is our key operational metric.
 
-## Approach & Methodology
-1. **Exploratory Data Analysis (EDA):** Understanding class imbalance, sentence length distributions, and word frequencies.
-2. **Preprocessing:** Text cleaning, tokenization, padding, and text-to-sequence vectorization.
-3. **Modeling:** * Baseline Deep Learning architectures (Embedding + GlobalAveragePooling / Simple RNN / LSTM).
-   * Transfer Learning using pre-trained word embeddings or advanced language models if necessary.
-4. **Evaluation:** Assessing performance using precision, recall, and F1-score to handle class imbalance effectively.
+| Model Architecture | Spam Precision | Spam Recall | Spam F1-Score | Operational Assessment |
+| :--- | :---: | :---: | :---: | :--- |
+| **1. Baseline (Embedding + Pooling)** | 1.00* | 0.01 | 0.01 | **Failed.** High precision is an illusion; the model systematically guessed "ham". |
+| **2. RNN (Bidirectional LSTM)** | 0.99 | 0.89 | 0.94 | **Excellent Alternative.** Lightweight with high sequential awareness. |
+| **3. DistilBERT (Transformers)** | **0.99** | **0.96** | **0.97** | **Best Choice.** Safest production boundary (only 2 errors on the entire test set). |
 
-## How to Run
-1. Clone this repository:
-   ```bash
-   git clone [https://github.com/Semia-BEN-AMARA/Spam_Detector.git]
+## 📁 Repository Structure
+
+* `notebooks/eda_and_modeling.ipynb` 🧪 : **The Lab Phase.** Contains Exploratory Data Analysis, model benchmarking, and performance charts.
+* `src/preprocessing.py` ⚙️ : **The Production Pipeline.** Clean data loading and native DistilBERT sub-word tokenization.
+* `src/model.py` 🧠 : **The Production Deployment Wrapper.** Independent structural definition and compilation of the selected DistilBERT model.
+* `requirements.txt` 📌 : Environment dependencies.
+
+## 🚀 How to Run
+
+### 1. Installation
+Clone the repository and install the required dependencies in a Python 3.10 environment:
+```bash
+git clone [https://github.com/Semia-BEN-AMARA/Spam_Detector.git](https://github.com/Semia-BEN-AMARA/Spam_Detector.git)
+cd Spam_Detector
+pip install -r requirements.txt
